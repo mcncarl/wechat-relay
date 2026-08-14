@@ -1,0 +1,24 @@
+{
+  "name": "wechat-relay",
+  "version": "0.1.0",
+  "description": "A loopback-only, authenticated relay for four WeChat Official Account draft routes.",
+  "type": "module",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": "20.x || 22.x || 24.x"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "lint": "eslint .",
+    "syntax": "node --check src/auth.js && node --check src/body.js && node --check src/config.js && node --check src/errors.js && node --check src/idempotency-store.js && node --check src/index.js && node --check src/logger.js && node --check src/rate-limit.js && node --check src/routes.js && node --check src/server.js && node --check src/wechat-client.js && node --check scripts/secret-scan.mjs",
+    "secret-scan": "node scripts/secret-scan.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "12.4.1"
+  },
+  "devDependencies": {
+    "eslint": "9.39.1"
+  }
+}

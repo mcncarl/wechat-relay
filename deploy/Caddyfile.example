@@ -1,0 +1,20 @@
+relay.example.com {
+	request_body {
+		max_size 32MB
+	}
+
+	header {
+		-Server
+		Cache-Control "no-store"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+	}
+
+	reverse_proxy 127.0.0.1:18794 {
+		transport http {
+			dial_timeout 3s
+			response_header_timeout 35s
+			keepalive 5s
+		}
+	}
+}
