@@ -29,6 +29,6 @@
     "better-sqlite3": "12.4.1"
   },
   "devDependencies": {
-    "eslint": "9.39.1"
+    "eslint": "10.8.1"
   }
 }
