@@ -26,7 +26,7 @@
     "check": "npm test && npm run lint && npm run syntax && npm run secret-scan"
   },
   "dependencies": {
-    "better-sqlite3": "12.4.1"
+    "better-sqlite3": "13.0.3"
   },
   "devDependencies": {
     "eslint": "9.39.1"
