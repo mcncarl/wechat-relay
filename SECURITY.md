@@ -2,11 +2,15 @@
 
 ## Supported version
 
-Only the latest reviewed revision on the private `main` branch is supported. Deploy by immutable revision and keep `package-lock.json` with it.
+Security fixes target the latest published release and the current `main`
+branch. Deploy an immutable tag or commit and keep its matching
+`package-lock.json`.
 
 ## Reporting a vulnerability
 
-Use a private GitHub Security Advisory for this repository. Do not open a public issue containing a credential, request body, media identifier, unpublished article, server address, or exploit details.
+Use [GitHub private vulnerability reporting](https://github.com/mcncarl/wechat-relay/security/advisories/new).
+Do not open a public issue containing a credential, request body, media
+identifier, unpublished article, server address, or exploit details.
 
 Include the affected revision, route, preconditions, impact, and a minimal redacted reproduction. Never use a real Official Account credential or create a real draft while demonstrating a report.
 

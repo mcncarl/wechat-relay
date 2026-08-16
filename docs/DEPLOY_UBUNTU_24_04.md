@@ -6,11 +6,17 @@ This is intentionally a manual procedure. Read every command, substitute only op
 
 Use an operator-controlled Ubuntu 24.04 server with a stable outbound IPv4. Hong Kong is the preferred region when it provides the required IPv4 and acceptable access to `api.weixin.qq.com`; it is not a substitute for testing connectivity.
 
-Install one supported Node.js LTS major (20.x, 22.x, or 24.x) from an official distribution channel, then verify the major before installing dependencies:
+Install one supported Node.js LTS major (20.x, 22.x, or 24.x) from an official
+system-level distribution channel. The provided systemd unit executes
+`/usr/bin/node`, so that exact path must exist and npm must be visible to the
+dedicated build account. Verify the paths and major before installing
+dependencies:
 
 ```bash
-node --version
-npm --version
+test "$(command -v node)" = "/usr/bin/node"
+test "$(command -v npm)" = "/usr/bin/npm"
+/usr/bin/node --version
+/usr/bin/npm --version
 ```
 
 Never reuse `node_modules` across Node major versions. `better-sqlite3` is a native addon and must be installed for the selected LTS runtime.
@@ -27,14 +33,21 @@ Create a dedicated, non-login build account. It may write the source tree only w
 ```bash
 sudo useradd --system --create-home --home-dir /var/lib/wechat-relay-build --shell /usr/sbin/nologin wechat-relay-build
 sudo install -d -m 0755 -o wechat-relay-build -g wechat-relay-build /opt/wechat-relay
-sudo -H -u wechat-relay-build git clone https://github.com/mcncarl/wechat-relay.git /opt/wechat-relay
+sudo -H -u wechat-relay-build /usr/bin/node --version
+sudo -H -u wechat-relay-build /usr/bin/npm --version
+sudo -H -u wechat-relay-build git clone --branch 0.1.0 --depth 1 https://github.com/mcncarl/wechat-relay.git /opt/wechat-relay
 cd /opt/wechat-relay
-sudo -H -u wechat-relay-build npm ci --omit=dev
+sudo -H -u wechat-relay-build /usr/bin/npm ci --omit=dev
 sudo chown -R root:root /opt/wechat-relay
 sudo chmod -R u=rwX,go=rX /opt/wechat-relay
 ```
 
-Use a repository-scoped, read-only deploy credential for the build account and keep it out of shell arguments and Git configuration inside the checkout. Review `package-lock.json` before installation. Dependency lifecycle scripts never run as root; after installation, the root-owned checkout is no longer writable by the build account. The systemd service still runs as a separate `DynamicUser` with access only to its private state directory.
+The public repository can be cloned anonymously; do not put a GitHub token or
+Deploy Key in the clone URL or server checkout. Review `package-lock.json`
+before installation. Dependency lifecycle scripts never run as root; after
+installation, the root-owned checkout is no longer writable by the build
+account. The systemd service still runs as a separate `DynamicUser` with access
+only to its private state directory.
 
 Do not copy local test results, launchd property lists, old server configuration, or an existing `.env` into this directory.
 
@@ -160,7 +173,7 @@ sudo systemctl stop wechat-relay.service
 sudo chown -R wechat-relay-build:wechat-relay-build /opt/wechat-relay
 sudo -H -u wechat-relay-build git -C /opt/wechat-relay fetch --all --prune
 sudo -H -u wechat-relay-build git -C /opt/wechat-relay checkout <reviewed-revision>
-sudo -H -u wechat-relay-build npm ci --omit=dev --prefix /opt/wechat-relay
+sudo -H -u wechat-relay-build /usr/bin/npm ci --omit=dev --prefix /opt/wechat-relay
 sudo chown -R root:root /opt/wechat-relay
 sudo chmod -R u=rwX,go=rX /opt/wechat-relay
 sudo systemctl start wechat-relay.service
