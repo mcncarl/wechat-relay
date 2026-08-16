@@ -1,6 +1,14 @@
 # wechat-relay
 
-`wechat-relay` is a small, private relay for four WeChat Official Account draft APIs. It exists for one narrow deployment problem: the Official Account allowlist sees the relay server's fixed outbound IPv4 instead of a changing client address.
+`wechat-relay` is a small, public, self-hosted relay for four WeChat Official Account draft APIs. It exists for one narrow deployment problem: the Official Account allowlist sees the relay server's fixed outbound IPv4 instead of a changing client address.
+
+Commercial use is permitted, but users must comply with
+`AGPL-3.0-or-later`. For commercial deployment, customization, training, or
+technical support, contact the repository maintainer.
+
+> 商业使用：允许，但必须遵守 AGPL-3.0-or-later。
+>
+> 商业部署、定制、培训与技术支持：可联系维护者。
 
 The relay creates or reads drafts only through the four documented compatibility routes. It does not automate the WeChat client, open the Official Account web console, mass-send, publish, or provide a generic WeChat API proxy.
 
@@ -55,8 +63,15 @@ It documents two supported routes:
 
 There is deliberately no one-command installer. Credential creation, network exposure, WeChat allowlisting, and service activation remain explicit operator decisions.
 
+## Related repository
+
+- [Ailu](https://github.com/mcncarl/ailu) is the public Obsidian client that
+  uses this relay for explicit, draft-only WeChat Official Account uploads.
+  Ailu and this service are installed and configured separately.
+
 ## License
 
 Copyright 2026 wechat-relay contributors.
 
 Licensed under the GNU Affero General Public License, version 3 or any later version (`AGPL-3.0-or-later`). See [LICENSE](LICENSE).
+The project copyright and modification notice is preserved in [NOTICE.md](NOTICE.md).

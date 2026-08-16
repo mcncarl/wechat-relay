@@ -13,7 +13,11 @@ test("package is private, AGPL, and limited to verified Node LTS lines", () => {
   assert.equal(pkg.private, true);
   assert.equal(pkg.license, "AGPL-3.0-or-later");
   assert.equal(pkg.engines.node, "20.x || 22.x || 24.x");
-  assert.match(text("LICENSE"), /GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3/iu);
+  assert.match(text("LICENSE").trimStart(), /^GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3/iu);
+  assert.ok(text("NOTICE.md").includes("Copyright (C) 2026 wechat-relay contributors"));
+  assert.ok(text("README.md").includes("Commercial use is permitted"));
+  assert.ok(text("README.md").includes("commercial deployment, customization, training, or"));
+  assert.ok(text("README.md").includes("商业使用：允许，但必须遵守 AGPL-3.0-or-later"));
 });
 
 test("environment example contains keys but no values", () => {
@@ -47,8 +51,11 @@ test("systemd unit keeps Node on loopback with a private writable state director
 
 test("manual deployment documents exactly the two approved edge routes", () => {
   const guide = text("docs/DEPLOY_UBUNTU_24_04.md");
-  assert.match(guide, /sudo -H -u wechat-relay-build npm ci --omit=dev/u);
+  assert.match(guide, /sudo -H -u wechat-relay-build \/usr\/bin\/npm ci --omit=dev/u);
   assert.doesNotMatch(guide, /sudo\s+npm\s+(?:ci|install|rebuild)/u);
+  assert.ok(guide.includes("git clone --branch 0.1.0 --depth 1 https://github.com/mcncarl/wechat-relay.git"));
+  assert.ok(guide.includes("public repository can be cloned anonymously"));
+  assert.ok(guide.includes('test "$(command -v node)" = "/usr/bin/node"'));
   assert.ok(guide.includes("lifecycle scripts never run as root"));
   assert.ok(guide.includes("Tailscale Serve"));
   assert.ok(guide.includes("operator domain plus Caddy"));
@@ -75,4 +82,5 @@ test("protocol and threat model preserve the narrow four-route boundary", () => 
   assert.match(threatModel, /^Version: uncommitted-snapshot-sha256:[0-9a-f]{64}$/mu);
   assert.equal(/^Version: snapshot-pending$/mu.test(threatModel), false);
   assert.ok(text("SECURITY.md").includes("Access tokens never leave process memory"));
+  assert.ok(text("SECURITY.md").includes("/security/advisories/new"));
 });

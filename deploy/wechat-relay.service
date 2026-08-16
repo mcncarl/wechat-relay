@@ -1,5 +1,5 @@
 [Unit]
-Description=Private WeChat Official Account draft relay
+Description=Self-hosted WeChat Official Account draft relay
 Documentation=https://github.com/mcncarl/wechat-relay
 After=network-online.target
 Wants=network-online.target

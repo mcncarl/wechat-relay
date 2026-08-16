@@ -5,6 +5,14 @@
   "type": "module",
   "private": true,
   "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcncarl/wechat-relay.git"
+  },
+  "homepage": "https://github.com/mcncarl/wechat-relay#readme",
+  "bugs": {
+    "url": "https://github.com/mcncarl/wechat-relay/issues"
+  },
   "engines": {
     "node": "20.x || 22.x || 24.x"
   },
@@ -13,7 +21,9 @@
     "test": "node --test",
     "lint": "eslint .",
     "syntax": "node --check src/auth.js && node --check src/body.js && node --check src/config.js && node --check src/errors.js && node --check src/idempotency-store.js && node --check src/index.js && node --check src/logger.js && node --check src/rate-limit.js && node --check src/routes.js && node --check src/server.js && node --check src/wechat-client.js && node --check scripts/secret-scan.mjs",
-    "secret-scan": "node scripts/secret-scan.mjs"
+    "secret-scan": "node scripts/secret-scan.mjs",
+    "audit:dependencies": "npm audit --audit-level=low",
+    "check": "npm test && npm run lint && npm run syntax && npm run secret-scan"
   },
   "dependencies": {
     "better-sqlite3": "12.4.1"
