@@ -28,7 +28,7 @@ Read [SECURITY.md](SECURITY.md), [THREAT_MODEL.md](THREAT_MODEL.md), and [docs/P
 
 ## Runtime requirements
 
-- Node.js 20.x, 22.x, or 24.x. Startup rejects other majors; install dependencies afresh when changing Node majors because `better-sqlite3` is native.
+- Node.js 22.x from 22.14.0, or 24.x. `better-sqlite3` 13 requires Node-API 10, which Node.js 22 provides only from 22.14.0. Startup rejects other versions; install dependencies afresh when changing Node majors because `better-sqlite3` is native.
 - Ubuntu 24.04 for the documented production setup
 - A user-supplied server with a stable outbound IPv4 already accepted by the WeChat Official Account allowlist
 

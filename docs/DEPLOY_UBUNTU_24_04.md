@@ -6,11 +6,12 @@ This is intentionally a manual procedure. Read every command, substitute only op
 
 Use an operator-controlled Ubuntu 24.04 server with a stable outbound IPv4. Hong Kong is the preferred region when it provides the required IPv4 and acceptable access to `api.weixin.qq.com`; it is not a substitute for testing connectivity.
 
-Install one supported Node.js LTS major (20.x, 22.x, or 24.x) from an official
-system-level distribution channel. The provided systemd unit executes
-`/usr/bin/node`, so that exact path must exist and npm must be visible to the
-dedicated build account. Verify the paths and major before installing
-dependencies:
+Install one supported Node.js LTS release (22.x from 22.14.0, or 24.x) from an
+official system-level distribution channel. Older 22.x releases lack the
+Node-API 10 support that `better-sqlite3` 13 requires, and the relay refuses to
+start on them. The provided systemd unit executes `/usr/bin/node`, so that
+exact path must exist and npm must be visible to the dedicated build account.
+Verify the paths and version before installing dependencies:
 
 ```bash
 test "$(command -v node)" = "/usr/bin/node"
