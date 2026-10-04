@@ -13,17 +13,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
+  node:
+    name: Node.js ${{ matrix.node-version }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        # Keep in sync with package.json engines and src/config.js: the exact
+        # 22.x minimum, plus the current 22.x and 24.x releases.
+        node-version:
+          - "22.14.0"
+          - "22.x"
+          - "24.x"
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Use Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: ${{ matrix.node-version }}
           cache: npm
 
       - name: Install dependencies
@@ -34,3 +44,19 @@ jobs:
 
       - name: Run verification
         run: npm run check
+
+  # Branch protection requires a check named "verify". It passes only when
+  # every Node.js job passed, and fails closed if any failed, was cancelled,
+  # or was skipped.
+  verify:
+    if: ${{ always() }}
+    needs: node
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every Node.js job to pass
+        env:
+          NODE_JOBS_RESULT: ${{ needs.node.result }}
+        run: |
+          echo "Node.js matrix result: ${NODE_JOBS_RESULT}"
+          test "${NODE_JOBS_RESULT}" = "success"

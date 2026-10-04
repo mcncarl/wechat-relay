@@ -4,14 +4,22 @@ import path from "node:path";
 import { ConfigurationError } from "./errors.js";
 
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1"]);
-const SUPPORTED_NODE_MAJORS = new Set([20, 22, 24]);
+// Supported Node.js major -> minimum minor release. better-sqlite3 13 requires
+// Node-API 10, which Node.js 22 provides only from 22.14.0.
+const SUPPORTED_NODE_MINIMUM_MINORS = new Map([
+  [22, 14],
+  [24, 0],
+]);
 
 export function assertSupportedNodeVersion(version = process.versions.node) {
-  const major = Number.parseInt(String(version).split(".")[0], 10);
-  if (!SUPPORTED_NODE_MAJORS.has(major)) {
+  const [major, minor] = String(version)
+    .split(".")
+    .map((part) => Number.parseInt(part, 10));
+  const minimumMinor = SUPPORTED_NODE_MINIMUM_MINORS.get(major);
+  if (minimumMinor === undefined || !(minor >= minimumMinor)) {
     throw new ConfigurationError(
       "unsupported_NODE_VERSION",
-      "Node.js major version must be 20, 22, or 24.",
+      "Node.js version must be 22.14.0 or a later 22.x release, or 24.x.",
     );
   }
 }

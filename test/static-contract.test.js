@@ -12,12 +12,19 @@ test("package is private, AGPL, and limited to verified Node LTS lines", () => {
   const pkg = JSON.parse(text("package.json"));
   assert.equal(pkg.private, true);
   assert.equal(pkg.license, "AGPL-3.0-or-later");
-  assert.equal(pkg.engines.node, "20.x || 22.x || 24.x");
+  assert.equal(pkg.engines.node, "^22.14.0 || 24.x");
   assert.match(text("LICENSE").trimStart(), /^GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3/iu);
   assert.ok(text("NOTICE.md").includes("Copyright (C) 2026 wechat-relay contributors"));
   assert.ok(text("README.md").includes("Commercial use is permitted"));
   assert.ok(text("README.md").includes("commercial deployment, customization, training, or"));
   assert.ok(text("README.md").includes("商业使用：允许，但必须遵守 AGPL-3.0-or-later"));
+});
+
+test("CI verifies the 22.x minimum and every supported Node line", () => {
+  const workflow = text(".github/workflows/ci.yml");
+  for (const version of ["22.14.0", "22.x", "24.x"]) {
+    assert.ok(workflow.includes(`- "${version}"`), version);
+  }
 });
 
 test("environment example contains keys but no values", () => {
